@@ -4,7 +4,8 @@ class CalculatorParent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      displayValue: ""
+      displayValue: "",
+      memoizedCalculations: []
     };
   }
 
@@ -16,80 +17,36 @@ class CalculatorParent extends React.Component {
 
   clearDisplayValue = () => {
     this.setState({
-      displayValue: ""
+      displayValue: this.state.displayValue
+        .toString()
+        .substr(0, this.state.displayValue.length - 1)
     });
   };
 
-  evaluatePostfixExpression = postfixExpr => {
-    let stack = [];
-    for (let i = 0; i < postfixExpr.length; i++) {
-      if (!isNaN(parseFloat(postfixExpr[i]))) {
-        stack.push(parseFloat(postfixExpr[i]));
-      } else {
-        let num1 = stack.pop();
-        let num2 = stack.pop();
-        switch (postfixExpr[i]) {
-          case "+":
-            stack.push(num1 + num2);
-            break;
-          case "-":
-            stack.push(num1 - num2);
-            break;
-          case "*":
-            stack.push(num1 * num2);
-            break;
-          case "/":
-            stack.push(num2 / num1);
-            break;
-        }
-      }
+  evaluatePostfixExpression = () => {
+    const expression = this.state.displayValue.toString();
+    const memoizedExpr = this.checkMemoizedExpression(expression);
+    if (memoizedExpr) {
+      this.setState({ displayValue: eval(memoizedExpr) });
+    } else {
+      this.setState({ displayValue: eval(this.state.displayValue) }, () => {
+        this.updateMemoizedCalculations(expression);
+      });
     }
-    const ans = stack.pop();
-    this.setState({ displayValue: isNaN(ans) ? "" : ans });
   };
 
-  convertToPostfix = () => {
-    let postfixExpr = [];
-    let stack = [];
-    let j = 0;
-    let expr = this.state.displayValue.trim();
-    for (let i = 0; i < expr.length; i++) {
-      if (expr.charAt(i) >= "0" && expr.charAt(i) <= "9") {
-        postfixExpr = postfixExpr + expr.charAt(i);
-      } else {
-        if (
-          expr.charAt(i) === "+" ||
-          expr.charAt(i) === "-" ||
-          expr.charAt(i) === "*" ||
-          expr.charAt(i) === "/"
-        ) {
-          if (stack.length === 0) {
-            stack.push(expr.charAt(i));
-          } else {
-            if (
-              this.getPrecedence(expr.charAt(i)) >=
-              this.getPrecedence(stack[stack.length - 1])
-            ) {
-              stack.push(expr.charAt(i));
-            } else {
-              while (stack.length !== 0) {
-                if (
-                  this.getPrecedence(expr.charAt(i)) <
-                  this.getPrecedence(stack[stack.length - 1])
-                ) {
-                  postfixExpr = postfixExpr + stack.pop();
-                }
-              }
-              stack.push(expr.charAt(i));
-            }
-          }
-        }
-      }
-    }
-    while (stack.length !== 0) {
-      postfixExpr = postfixExpr + stack.pop();
-    }
-    this.evaluatePostfixExpression(postfixExpr);
+  checkMemoizedExpression = expression => {
+    const { memoizedCalculations } = this.state;
+    const expr = memoizedCalculations.find(
+      calcuation => calcuation === expression
+    );
+
+    return expr;
+  };
+  updateMemoizedCalculations = expression => {
+    this.setState({
+      memoizedCalculations: this.state.memoizedCalculations.concat(expression)
+    });
   };
 
   getPrecedence = operator => {
@@ -102,6 +59,7 @@ class CalculatorParent extends React.Component {
         return 1;
     }
   };
+
   render() {
     return (
       <section
@@ -333,7 +291,7 @@ class CalculatorParent extends React.Component {
               fontSize: "30px",
               borderRadius: "10px"
             }}
-            onClick={this.convertToPostfix}
+            onClick={this.evaluatePostfixExpression}
           >
             =
           </button>

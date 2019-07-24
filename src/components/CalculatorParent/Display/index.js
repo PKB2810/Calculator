@@ -15,4 +15,4 @@ function Display(props) {
   );
 }
 
-export default Display;
+export default React.memo(Display);
