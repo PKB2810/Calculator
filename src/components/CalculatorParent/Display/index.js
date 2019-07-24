@@ -1,7 +1,18 @@
 import React from "react";
 
-function Display() {
-  return <input type="text" style={{ textAlign: "right" }} />;
+function Display(props) {
+  return (
+    <input
+      type="text"
+      style={{
+        textAlign: "right",
+        width: "100%",
+        height: "100%",
+        fontSize: "30px"
+      }}
+      value={props.value}
+    />
+  );
 }
 
-export default Display;
+export default React.memo(Display);
