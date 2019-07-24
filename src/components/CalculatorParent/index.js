@@ -27,10 +27,10 @@ class CalculatorParent extends React.Component {
     const expression = this.state.displayValue.toString();
     const memoizedExpr = this.checkMemoizedExpression(expression);
     if (memoizedExpr) {
-      this.setState({ displayValue: eval(memoizedExpr) });
+      this.setState({ displayValue: memoizedExpr.split("=")[1] });
     } else {
       this.setState({ displayValue: eval(this.state.displayValue) }, () => {
-        this.updateMemoizedCalculations(expression);
+        this.updateMemoizedCalculations(expression, this.state.displayValue);
       });
     }
   };
@@ -38,26 +38,18 @@ class CalculatorParent extends React.Component {
   checkMemoizedExpression = expression => {
     const { memoizedCalculations } = this.state;
     const expr = memoizedCalculations.find(
-      calcuation => calcuation === expression
+      calcuation => calcuation.split("=")[0] === expression
     );
 
     return expr;
   };
-  updateMemoizedCalculations = expression => {
+  updateMemoizedCalculations = (expression, evaluaiton) => {
+    const memoizedCalculation = expression + "=" + evaluaiton;
     this.setState({
-      memoizedCalculations: this.state.memoizedCalculations.concat(expression)
+      memoizedCalculations: this.state.memoizedCalculations.concat(
+        memoizedCalculation
+      )
     });
-  };
-
-  getPrecedence = operator => {
-    switch (operator) {
-      case "*":
-      case "/":
-        return 2;
-      case "+":
-      case "-":
-        return 1;
-    }
   };
 
   render() {
