@@ -9,10 +9,12 @@ function App() {
       style={{
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center"
+        justifyContent: "center",
+        height: "100%",
+        width: "60%",
+        backgroundColor: "#f0e1cc"
       }}
     >
-      <header>Calculator</header>
       <CalculatorParent />
     </section>
   );

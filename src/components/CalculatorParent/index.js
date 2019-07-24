@@ -10,7 +10,7 @@ class CalculatorParent extends React.Component {
 
   setDisplayValue = e => {
     this.setState({
-      displayValue: this.state.displayValue.toString() + e.target.innerHTML
+      displayValue: this.state.displayValue + e.target.innerHTML
     });
   };
 
@@ -44,44 +44,43 @@ class CalculatorParent extends React.Component {
         }
       }
     }
-    this.setState({ displayValue: !isNaN(stack.pop()) ? stack.pop() : "" });
+    const ans = stack.pop();
+    this.setState({ displayValue: isNaN(ans) ? "" : ans });
   };
 
   convertToPostfix = () => {
     let postfixExpr = [];
     let stack = [];
     let j = 0;
-    for (let i = 0; i < this.state.displayValue.length; i++) {
-      if (
-        this.state.displayValue.charAt(i) >= "0" &&
-        this.state.displayValue.charAt(i) <= "9"
-      ) {
-        postfixExpr = postfixExpr + this.state.displayValue.charAt(i);
+    let expr = this.state.displayValue.trim();
+    for (let i = 0; i < expr.length; i++) {
+      if (expr.charAt(i) >= "0" && expr.charAt(i) <= "9") {
+        postfixExpr = postfixExpr + expr.charAt(i);
       } else {
         if (
-          this.state.displayValue.charAt(i) === "+" ||
-          this.state.displayValue.charAt(i) === "-" ||
-          this.state.displayValue.charAt(i) === "*" ||
-          this.state.displayValue.charAt(i) === "/"
+          expr.charAt(i) === "+" ||
+          expr.charAt(i) === "-" ||
+          expr.charAt(i) === "*" ||
+          expr.charAt(i) === "/"
         ) {
           if (stack.length === 0) {
-            stack.push(this.state.displayValue.charAt(i));
+            stack.push(expr.charAt(i));
           } else {
             if (
-              this.getPrecedence(this.state.displayValue.charAt(i)) >=
+              this.getPrecedence(expr.charAt(i)) >=
               this.getPrecedence(stack[stack.length - 1])
             ) {
-              stack.push(this.state.displayValue.charAt(i));
+              stack.push(expr.charAt(i));
             } else {
               while (stack.length !== 0) {
                 if (
-                  this.getPrecedence(this.state.displayValue.charAt(i)) <
+                  this.getPrecedence(expr.charAt(i)) <
                   this.getPrecedence(stack[stack.length - 1])
                 ) {
                   postfixExpr = postfixExpr + stack.pop();
                 }
               }
-              stack.push(this.state.displayValue.charAt(i));
+              stack.push(expr.charAt(i));
             }
           }
         }
@@ -110,10 +109,12 @@ class CalculatorParent extends React.Component {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-around",
-          width: "100%"
+          width: "100%",
+          height: "90%",
+          alignItems: "center"
         }}
       >
-        <section style={{ width: "100%" }}>
+        <section style={{ height: "20%", width: "80%" }}>
           <Display value={this.state.displayValue} />
         </section>
         <section
@@ -121,74 +122,247 @@ class CalculatorParent extends React.Component {
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
-            width: "100%"
+            width: "80%",
+            height: "16%",
+            alignItems: "center"
           }}
         >
-          <button onClick={this.setDisplayValue}>7</button>
+          <button
+            style={{
+              height: "50%",
+              width: "10%",
+              fontSize: "30px",
+              borderRadius: "10px"
+            }}
+            onClick={this.setDisplayValue}
+          >
+            7
+          </button>
 
-          <button onClick={this.setDisplayValue}>8</button>
+          <button
+            style={{
+              height: "50%",
+              width: "10%",
+              fontSize: "30px",
+              borderRadius: "10px"
+            }}
+            onClick={this.setDisplayValue}
+          >
+            8
+          </button>
 
-          <button onClick={this.setDisplayValue}>9</button>
+          <button
+            style={{
+              height: "50%",
+              width: "10%",
+              fontSize: "30px",
+              borderRadius: "10px"
+            }}
+            onClick={this.setDisplayValue}
+          >
+            9
+          </button>
 
-          <button onClick={this.setDisplayValue}>-</button>
+          <button
+            style={{
+              height: "50%",
+              width: "10%",
+              fontSize: "30px",
+              borderRadius: "10px"
+            }}
+            onClick={this.setDisplayValue}
+          >
+            -
+          </button>
         </section>
         <section
           style={{
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
-            width: "100%"
+            width: "80%",
+            height: "16%",
+            alignItems: "center"
           }}
         >
-          <button onClick={this.setDisplayValue}>4</button>
+          <button
+            style={{
+              height: "50%",
+              width: "10%",
+              fontSize: "30px",
+              borderRadius: "10px"
+            }}
+            onClick={this.setDisplayValue}
+          >
+            4
+          </button>
 
-          <button onClick={this.setDisplayValue}>5</button>
+          <button
+            style={{
+              height: "50%",
+              width: "10%",
+              fontSize: "30px",
+              borderRadius: "10px"
+            }}
+            onClick={this.setDisplayValue}
+          >
+            5
+          </button>
 
-          <button onClick={this.setDisplayValue}>6</button>
+          <button
+            style={{
+              height: "50%",
+              width: "10%",
+              fontSize: "30px",
+              borderRadius: "10px"
+            }}
+            onClick={this.setDisplayValue}
+          >
+            6
+          </button>
 
-          <button onClick={this.setDisplayValue}>/</button>
+          <button
+            style={{
+              height: "50%",
+              width: "10%",
+              fontSize: "30px",
+              borderRadius: "10px"
+            }}
+            onClick={this.setDisplayValue}
+          >
+            /
+          </button>
         </section>
         <section
           style={{
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
-            width: "100%"
+            width: "80%",
+            height: "16%",
+            alignItems: "center"
           }}
         >
-          <button onClick={this.setDisplayValue}> 1</button>
+          <button
+            style={{
+              height: "50%",
+              width: "10%",
+              fontSize: "30px",
+              borderRadius: "10px"
+            }}
+            onClick={this.setDisplayValue}
+          >
+            {" "}
+            1
+          </button>
 
-          <button onClick={this.setDisplayValue}>2</button>
+          <button
+            style={{
+              height: "50%",
+              width: "10%",
+              fontSize: "30px",
+              borderRadius: "10px"
+            }}
+            onClick={this.setDisplayValue}
+          >
+            2
+          </button>
 
-          <button onClick={this.setDisplayValue}>3</button>
+          <button
+            style={{
+              height: "50%",
+              width: "10%",
+              fontSize: "30px",
+              borderRadius: "10px"
+            }}
+            onClick={this.setDisplayValue}
+          >
+            3
+          </button>
 
-          <button onClick={this.setDisplayValue}>*</button>
+          <button
+            style={{
+              height: "50%",
+              width: "10%",
+              fontSize: "30px",
+              borderRadius: "10px"
+            }}
+            onClick={this.setDisplayValue}
+          >
+            *
+          </button>
         </section>
         <section
           style={{
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
-            width: "100%"
+            width: "80%",
+            height: "16%",
+            alignItems: "center"
           }}
         >
-          <button onClick={this.setDisplayValue}>0</button>
+          <button
+            style={{
+              height: "50%",
+              width: "10%",
+              fontSize: "30px",
+              borderRadius: "10px"
+            }}
+            onClick={this.setDisplayValue}
+          >
+            0
+          </button>
 
-          <button onClick={this.setDisplayValue}>.</button>
+          <button
+            style={{
+              height: "50%",
+              width: "10%",
+              fontSize: "30px",
+              borderRadius: "10px"
+            }}
+            onClick={this.setDisplayValue}
+          >
+            .
+          </button>
 
-          <button onClick={this.convertToPostfix}>=</button>
+          <button
+            style={{
+              height: "50%",
+              width: "10%",
+              fontSize: "30px",
+              borderRadius: "10px"
+            }}
+            onClick={this.convertToPostfix}
+          >
+            =
+          </button>
 
-          <button onClick={this.setDisplayValue}>+</button>
+          <button
+            style={{
+              height: "50%",
+              width: "10%",
+              fontSize: "30px",
+              borderRadius: "10px"
+            }}
+            onClick={this.setDisplayValue}
+          >
+            +
+          </button>
         </section>
         <section
           style={{
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
-            width: "100%"
+            width: "80%",
+            height: "16%"
           }}
         >
-          <button onClick={this.clearDisplayValue} style={{ flexGrow: "4" }}>
+          <button
+            onClick={this.clearDisplayValue}
+            style={{ flexGrow: "4", fontSize: "30px", borderRadius: "10px" }}
+          >
             C
           </button>
         </section>
