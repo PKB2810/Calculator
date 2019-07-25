@@ -7,16 +7,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 function App() {
   return (
     <ErrorBoundary>
-      <section
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          height: "100%",
-          width: "60%",
-          backgroundColor: "#f0e1cc"
-        }}
-      >
+      <section id="main">
         <CalculatorParent />
       </section>
     </ErrorBoundary>
