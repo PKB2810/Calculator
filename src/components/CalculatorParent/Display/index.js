@@ -1,7 +1,7 @@
 import React from "react";
 
-function Display() {
-  return <input type="text" style={{ textAlign: "right" }} />;
+function Display(props) {
+  return <input type="text" className="displayPanel" value={props.value} />;
 }
 
-export default Display;
+export default React.memo(Display);

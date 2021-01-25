@@ -2,19 +2,15 @@ import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import CalculatorParent from "./components/CalculatorParent";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 function App() {
   return (
-    <section
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center"
-      }}
-    >
-      <header>Calculator</header>
-      <CalculatorParent />
-    </section>
+    <ErrorBoundary>
+      <section id="main">
+        <CalculatorParent />
+      </section>
+    </ErrorBoundary>
   );
 }
 
